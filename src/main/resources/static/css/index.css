@@ -1,0 +1,190 @@
+/* ================= BODY ================= */
+
+body {
+    font-family: "gg sans","Segoe UI",sans-serif;
+    background: #313338;
+    color: #f2f3f5;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ================= CARD ================= */
+
+.auth-card {
+    background: #2b2d31;
+    padding: 32px;
+    width: 360px;
+
+    border-radius: 8px;
+
+    /* ВАЖНО — НЕТ glow */
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+
+    text-align: center;
+}
+
+/* ================= TITLE ================= */
+
+h2#form-title {
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 22px;
+}
+
+/* ================= INPUT ================= */
+
+input {
+    width: 100%;
+    padding: 11px;
+
+    margin: 10px 0;
+
+    border-radius: 4px;
+    border: 1px solid transparent;
+
+    background: #1e1f22;
+    color: #f2f3f5;
+
+    font-size: 14px;
+    box-sizing: border-box;
+
+    transition: border .15s ease,
+    background .15s ease;
+}
+
+input::placeholder {
+    color: #949ba4;
+}
+
+input:hover {
+    border-color: #404249;
+}
+
+input:focus {
+    outline: none;
+    border-color: #5865f2;
+    background: #1e1f22;
+}
+
+/* ================= BUTTON ================= */
+
+button#submitBtn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 16px;
+
+    border-radius: 4px;
+    border: none;
+
+    background: #5865f2;
+    color: white;
+
+    font-weight: 600;
+    font-size: 14px;
+
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+button#submitBtn:hover {
+    background: #4752c4;
+}
+
+button#submitBtn:active {
+    background: #3c45a5;
+}
+
+/* ================= ERRORS ================= */
+
+.error-text {
+    color: #ed4245;
+    font-size: 12px;
+    text-align: left;
+    height: 16px;
+}
+
+/* ================= TOGGLE ================= */
+
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 260px;
+    height: 40px;
+}
+
+.toggle-switch input {
+    display: none;
+}
+
+.switch-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    width: 100%;
+    height: 100%;
+
+    background: #1e1f22;
+    border-radius: 4px;
+
+    position: relative;
+    cursor: pointer;
+}
+
+/* TEXT */
+
+.status-text {
+    z-index: 2;
+    font-size: 14px;
+    color: #b5bac1;
+    font-weight: 500;
+}
+
+/* SLIDER */
+
+.slider {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+
+    width: 124px;
+    height: 32px;
+
+    background: #5865f2;
+    border-radius: 4px;
+
+    transition: transform .2s ease;
+}
+
+/* ACTIVE */
+
+#modeToggle:not(:checked) ~ .switch-label .login-text {
+    color: white;
+}
+
+#modeToggle:checked ~ .switch-label .reg-text {
+    color: white;
+}
+
+#modeToggle:checked ~ .switch-label .slider {
+    transform: translateX(128px);
+}
+
+/* ================= HIDDEN ================= */
+
+.hidden-field {
+    opacity: 0;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: translateY(-6px);
+    pointer-events: none;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>DemoCHAT</title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+
+<div class="auth-card">
+    <h2 id="form-title">新登録</h2>
+
+    <div class="toggle-container">
+        <div class="toggle-switch">
+            <input type="checkbox" id="modeToggle">
+            <label for="modeToggle" class="switch-label">
+                <div class="status-text login-text">ログイン</div>
+                <div class="status-text reg-text">新登録</div>
+                <div class="slider"></div>
+            </label>
+        </div>
+    </div>
+
+    <input type="text" id="username" placeholder="ユーザー名">
+    <span id="error-username" class="error-text"></span>
+
+    <input type="email" id="email" placeholder="Email">
+    <span id="error-email" class="error-text"></span>
+
+    <input type="password" id="password" placeholder="パスワード">
+    <span id="error-password" class="error-text"></span>
+
+    <input type="password" id="confirmPassword" placeholder="パスワード再入力">
+    <span id="error-confirmPassword" class="error-text"></span>
+
+    <button id="submitBtn" onclick="submitForm()">送信</button>
+</div>
+
+<script src="js/authenticator/auth.js"></script>
+<script src="js/authenticator/errorScript.js"></script>
+<script src="js/authenticator/toggleSwitch.js"></script>
+
+</body>
+</html>

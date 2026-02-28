@@ -1,0 +1,432 @@
+/* ======================================================
+   VARIABLES
+====================================================== */
+:root {
+    --bg-dark: #1e1f22;
+    --bg-medium: #2b2d31;
+    --bg-light: #313338;
+    --bg-input: #383a40;
+    --text-primary: #b5bac1;
+    --text-accent: #23a559;
+    --text-hover: white;
+    --hover-blue: #5865f2;
+    --hover-blue-dark: #4752c4;
+    --danger-red: #da373c;
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-circle: 50%;
+}
+
+/* ======================================================
+   BASE
+====================================================== */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    font-family: "gg sans","Segoe UI",sans-serif;
+    background: var(--bg-light);
+    color: var(--text-hover);
+}
+
+/* ======================================================
+   GENERAL TRANSITIONS
+====================================================== */
+.hover-reveal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s, transform .15s;
+}
+
+.hover-transition {
+    transition: background .15s, color .15s, transform .08s, box-shadow .15s;
+}
+
+/* ======================================================
+   SERVERS SIDEBAR
+====================================================== */
+.sidebar-servers {
+    width: 72px;
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 12px;
+}
+
+.server-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+    background: var(--bg-light);
+    border-radius: var(--radius-circle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: .15s;
+}
+
+.server-icon:hover {
+    background: var(--hover-blue);
+    border-radius: var(--radius-medium);
+}
+
+/* ACTIVE INDICATOR */
+.server-icon::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    width: 4px;
+    height: 0;
+    background: var(--text-hover);
+    border-radius: 2px;
+    transition: height .18s ease;
+}
+
+.server-icon:hover::before { height: 20px; }
+.server-icon.active::before { height: 40px; }
+
+.add-server-btn {
+    color: var(--text-accent);
+    font-size: 22px;
+}
+
+/* ======================================================
+   CHANNEL SIDEBAR
+====================================================== */
+.sidebar-channels {
+    width: 240px;
+    background: var(--bg-medium);
+    display: flex;
+    flex-direction: column;
+}
+
+.server-header-area {
+    height: 48px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--bg-dark);
+    font-weight: 600;
+}
+
+.server-actions {
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    transition: .15s;
+}
+
+.server-header-area:hover .server-actions { opacity: 1; }
+
+/* CHANNEL LIST */
+.channel-list { padding: 8px; }
+
+.channel-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2px 0;
+    padding-right: 4px;
+    border-radius: var(--radius-small);
+    transition: background .15s, transform .12s;
+    position: relative;
+}
+
+.channel-wrapper:hover {
+    background: #35373c;
+    transform: translateX(2px);
+}
+
+.channel-item {
+    flex-grow: 1;
+    padding: 6px 8px;
+    color: #949ba4;
+    cursor: pointer;
+}
+
+.channel-wrapper:hover .channel-item { color: var(--text-hover); }
+
+.channel-item.active {
+    background: #404249;
+    color: white;
+    border-radius: var(--radius-small);
+}
+
+/* CHANNEL ACTIONS */
+.channel-actions {
+    display: flex;
+    gap: 4px;
+    transform: translateX(6px);
+}
+.channel-wrapper:hover .channel-actions {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ======================================================
+   MEMBERS SIDEBAR
+====================================================== */
+.sidebar-members {
+    width: 240px;
+    background: var(--bg-medium);
+    border-left: 1px solid var(--bg-dark);
+    padding: 12px;
+}
+
+.members-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: #949ba4;
+    margin-bottom: 10px;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border-radius: var(--radius-small);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.member-item:hover { background: #35373c; color: white; }
+
+.member-avatar {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    background: var(--bg-dark);
+    border-radius: var(--radius-circle);
+}
+
+/* ======================================================
+   MAIN CHAT
+====================================================== */
+.main-chat {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TOP BAR */
+.top-bar {
+    height: 48px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--bg-dark);
+    font-weight: 600;
+}
+
+/* LOGOUT BUTTON */
+.btn-logout {
+    padding: 6px 12px;
+    border: none;
+    border-radius: var(--radius-medium);
+    background: var(--hover-blue);
+    color: white;
+    cursor: pointer;
+    transition: background .15s;
+}
+.btn-logout:hover { background: var(--hover-blue-dark); }
+
+/* ======================================================
+   MESSAGES
+====================================================== */
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.message-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-radius: var(--radius-medium);
+    transition: background .15s;
+    position: relative;
+}
+
+.message-item:hover { background: rgba(255,255,255,0.03); }
+
+.msg-content { display: flex; align-items: center; gap: 6px; }
+
+.msg-author { font-weight: 600; color: var(--text-accent); }
+.msg-text { color: #dbdee1; }
+
+/* MESSAGE ACTIONS */
+.msg-actions { display: flex; gap: 6px; transform: translateX(8px); }
+.message-item:hover .msg-actions { opacity: 1; transform: translateX(0); }
+
+/* ======================================================
+   INPUT
+====================================================== */
+.chat-input-area {
+    padding: 16px;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input {
+    flex-grow: 1;
+    background: var(--bg-input);
+    border: none;
+    padding: 12px 14px;
+    border-radius: var(--radius-medium);
+    color: white;
+}
+
+.chat-input:focus {
+    outline: none;
+    background: #404249;
+}
+
+/* SEND BUTTON */
+.btn-send {
+    padding: 8px 16px;
+    border-radius: var(--radius-medium);
+    border: none;
+    background: var(--hover-blue);
+    color: white;
+    cursor: pointer;
+    transition: background .15s;
+}
+.btn-send:hover { background: var(--hover-blue-dark); }
+
+/* ======================================================
+   BUTTONS (DYNAMIC FROM JS)
+====================================================== */
+.msg-btn,
+.edit-btn,
+.delete-btn,
+.server-edit-btn,
+.server-delete-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline: none;
+    background: var(--bg-medium);
+    color: var(--text-primary);
+    border-radius: var(--radius-medium);
+    cursor: pointer;
+    font-size: 14px;
+    transition: background .15s, color .15s, transform .08s, box-shadow .15s;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+
+/* hover эффекты */
+.msg-btn:hover,
+.edit-btn:hover,
+.server-edit-btn:hover {
+    background: var(--hover-blue);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+
+.delete-btn:hover,
+.server-delete-btn:hover {
+    background: var(--danger-red);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+
+/* active/click feel */
+.msg-btn:active,
+.edit-btn:active,
+.delete-btn:active,
+.server-edit-btn:active,
+.server-delete-btn:active { transform: scale(.92); }
+
+/* ======================================================
+   CONTROLS CONTAINERS
+====================================================== */
+.msg-controls,
+.channel-controls {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 4px;
+    padding: 3px 4px;
+    background: var(--bg-dark);
+    border-radius: var(--radius-medium);
+    opacity: 0;
+    pointer-events: none;
+    transition: .15s;
+}
+
+/* Показываем кнопки при ховере родителя */
+.message-item:hover .msg-controls,
+.channel-wrapper:hover .channel-controls {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%);
+}
+
+/* ======================================================
+   MODAL
+====================================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--bg-light);
+    padding: 24px;
+    width: 420px;
+    border-radius: var(--radius-medium);
+    animation: modalPop .18s ease;
+}
+
+@keyframes modalPop {
+    from { opacity: 0; transform: scale(.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    background: var(--bg-dark);
+    border: none;
+    border-radius: var(--radius-small);
+    color: white;
+}
+
+.modal-buttons { display: flex; justify-content: flex-end; gap: 10px; }
+
+.btn-create {
+    background: var(--hover-blue);
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-small);
+    color: white;
+    cursor: pointer;
+    transition: background .15s;
+}
+.btn-create:hover { background: var(--hover-blue-dark); }
+
+.btn-cancel {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+}
