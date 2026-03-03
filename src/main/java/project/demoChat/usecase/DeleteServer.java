@@ -25,7 +25,6 @@ public class DeleteServer {
 
         deleteServerPublisher.broadcastServerDelete(server);
 
-        // 2. Удаляем
         serverRepository.delete(server);
     }
 }

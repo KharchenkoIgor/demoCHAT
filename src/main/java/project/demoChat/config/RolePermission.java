@@ -16,35 +16,34 @@ public class RolePermission {
         this.memberRepository = memberRepository;
     }
 
-    // Универсальная проверка: есть ли у пользователя нужная роль или выше?
     public void checkRole(Long serverId, String username, MemberRole requiredRole) {
         Member member = memberRepository.findByServerIdAndUserUsername(serverId, username)
-                .orElseThrow(() -> new RuntimeException("Вы не являетесь участником этого сервера"));
+                .orElseThrow(() -> new RuntimeException("このサーバーのメンバーとして参加しているわけではありません"));
 
         MemberRole userRole = member.getRole();
 
-        // Логика иерархии:
-        // Если нам нужен OWNER, то пускаем только OWNER
         if (requiredRole == MemberRole.OWNER) {
-            if (userRole != MemberRole.OWNER) throw new RuntimeException("Нужны права владельца");
+            if (userRole != MemberRole.OWNER) throw new RuntimeException("管理者権限が必要です");
         }
 
-        // Если нам нужен ADMIN, то пускаем и ADMIN, и OWNER
         if (requiredRole == MemberRole.ADMIN) {
             if (userRole != MemberRole.ADMIN && userRole != MemberRole.OWNER) {
-                throw new RuntimeException("Нужны права администратора или владельца");
+                throw new RuntimeException("管理者またはアドミニストレータ権限が必要です");
             }
         }
-
-        // Обычному USER удалять ничего нельзя, поэтому для него проверок не делаем
     }
 
-    // Специальная проверка для сообщений (Автор или Админ+)
+    public void checkMessageEdit(Message message, String username) {
+
+        if (!message.getAuthor().getUsername().equals(username)) {
+            throw new RuntimeException("自分のメッセージしか編集出来ません");
+        }
+    }
+
     public void checkMessageDelete(Message message, String username) {
-        // 1. Если автор - ок
+
         if (message.getAuthor().getUsername().equals(username)) return;
 
-        // 2. Если не автор - проверяем, есть ли у него роль ADMIN или OWNER на этом сервере
         checkRole(message.getChannel().getServer().getId(), username, MemberRole.ADMIN);
     }
 }

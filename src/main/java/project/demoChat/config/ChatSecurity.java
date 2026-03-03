@@ -14,14 +14,12 @@ public class ChatSecurity {
         this.memberRepository = memberRepository;
     }
 
-    // Проверка 1: Ты вообще участник этого сервера?
     public void checkMembership(Long serverId, String username) {
         if (!memberRepository.existsByServerIdAndUserUsername(serverId, username)) {
             throw new RuntimeException("アクセスが禁止されている原因は: メンバではありません");
         }
     }
 
-    // Проверка 2: Какая у тебя роль? (Для фронтенда)
     public String getUserRole(Long serverId, String username) {
         return memberRepository.findByServerIdAndUserUsername(serverId, username)
                 .map(m -> m.getRole().name())

@@ -1,6 +1,5 @@
 import { appState } from '../state.js';
 
-// Универсальный создатель элементов
 const el = (tag, { cls = '', id = '', text = '', click = null } = {}, children =[]) => {
     const element = document.createElement(tag);
     if (cls) element.className = cls;
@@ -11,7 +10,6 @@ const el = (tag, { cls = '', id = '', text = '', click = null } = {}, children =
     return element;
 };
 
-// НОВЫЙ ПОМОЩНИК: Стандартная кнопка (✏️ или 🗑️)
 const createBtn = (icon, cls, onClick, stopProp = false) => {
     return el('button', {
         cls, text: icon, click: (e) => {
@@ -32,7 +30,7 @@ export function renderServerIcon(server, onClick) {
 
 export function renderServerHeader(serverName, onEdit = null, onDelete = null) {
     const elements = [el('span', { text: serverName })];
-    // Используем помощника для кнопок
+
     if (onEdit) elements.push(createBtn('✏️', 'server-edit-btn', onEdit));
     if (onDelete) elements.push(createBtn('🗑️', 'server-delete-btn', onDelete));
     return elements;
@@ -41,7 +39,6 @@ export function renderServerHeader(serverName, onEdit = null, onDelete = null) {
 export function renderChannel(channel, onClick, onDelete = null, onEdit = null) {
     const controls = el('div', { cls: 'channel-controls' });
 
-    // Используем помощника (stopProp = true, чтобы клик по кнопке не открывал канал)
     if (onEdit) controls.appendChild(createBtn('✏️', 'edit-btn', () => onEdit(channel), true));
     if (onDelete) controls.appendChild(createBtn('🗑️', 'delete-btn', () => onDelete(channel.id), true));
 
@@ -59,7 +56,6 @@ export function renderMessage(msg, onDelete = null, onEdit = null) {
 
     const controls = el('div', { cls: 'msg-controls' });
 
-    // Используем помощника
     if (isAuthor && onEdit) controls.appendChild(createBtn('✏️', 'msg-btn', () => onEdit(msg)));
     if ((isAuthor || isAdmin) && onDelete) controls.appendChild(createBtn('🗑️', 'msg-btn', () => onDelete(realId)));
 
