@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import project.demoChat.config.RolePermission;
+import project.demoChat.config.ChatSecurity;
 import project.demoChat.model.Message;
 import project.demoChat.repository.MessageRepository;
 import project.demoChat.websocket.MessageUpdatePublisher;
@@ -13,7 +13,7 @@ import project.demoChat.websocket.MessageUpdatePublisher;
 @Service
 public class UpdateMessage {
 
-    private final RolePermission rolePermission;
+    private final ChatSecurity chatSecurity;
     private final MessageRepository messageRepository;
     private final MessageUpdatePublisher messageUpdate;
 
@@ -22,7 +22,7 @@ public class UpdateMessage {
         Message newMessage = messageRepository.findById(messageId)
                 .orElseThrow(() -> new RuntimeException("メッセージが見つかりません"));
 
-        rolePermission.checkMessageEdit(newMessage, username);
+        chatSecurity.checkMessageEdit(newMessage, username);
 
         newMessage.setContent(content);
         Message savedMessage = messageRepository.save(newMessage);

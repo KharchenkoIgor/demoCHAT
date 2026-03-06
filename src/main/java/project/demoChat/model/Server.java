@@ -1,6 +1,7 @@
 package project.demoChat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class Server {
 
     private String name;
 
+    @Column(name = "public_status", nullable = false)
+    private boolean publicStatus;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
@@ -23,6 +27,9 @@ public class Server {
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Member> members;
+
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JoinRequest> joinRequests;
 
     public Server() {}
 
@@ -40,6 +47,13 @@ public class Server {
         this.name = name;
     }
 
+    public boolean isPublicStatus() {
+        return publicStatus;
+    }
+    public void setPublicStatus(boolean publicStatus) {
+        this.publicStatus = publicStatus;
+    }
+
     public User getOwner() {
         return owner;
     }
@@ -54,10 +68,18 @@ public class Server {
         this.channel = channel;
     }
 
+    public List<Member> getMembers() {
+        return members;
+    }
     public void setMembers(List<Member> members) {
         this.members = members;
     }
-    public List<Member> getMembers() {
-        return members;
+
+    public List<JoinRequest> getJoinRequests() {
+        return joinRequests;
+    }
+
+    public void setJoinRequests(List<JoinRequest> joinRequests) {
+        this.joinRequests = joinRequests;
     }
 }

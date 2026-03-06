@@ -21,13 +21,14 @@ public class CreateServer {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Server execute(String serverName, String username) {
+    public Server execute(String serverName, boolean isPublicStatus, String username) {
         User owner = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません: " + username));
 
         Server newServer = new Server();
         newServer.setName(serverName);
         newServer.setOwner(owner);
+        newServer.setPublicStatus(isPublicStatus);
         Server savedServer = serverRepository.save(newServer);
 
         Member newMember = new Member();

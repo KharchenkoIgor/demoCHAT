@@ -1,3 +1,5 @@
+import { showPush } from '../api/showPush.js';
+
 export const eventHandlers = [
     {
         type: "MESSAGE",
@@ -64,6 +66,26 @@ export const eventHandlers = [
             const msgText = document.getElementById(`msg-text-${data.id}`);
 
             if (msgText) msgText.textContent = data.content;
+        }
+    },
+    {
+        type:"NEW_JOIN_REQUEST",
+        handler: (data) => {
+            showPush(`新規申請: ${data.username} がサーバーに参加を希望しています`, 'info');
+
+            if (window.refreshRequestsUI) window.refreshRequestsUI(data.serverId);
+        }
+    },
+    {
+        type: "JOIN_RESPONSE",
+        handler: (data) => {
+            if (data.responseType === 'ACCEPTED') {
+                showPush(`祝！ サーバー 「${data.serverName}」 への参加が承認されました！`, 'success');
+                setTimeout(() => window.location.reload(), 2000);
+            }
+            else if (data.responseType === 'REJECTED') {
+                showPush(`残念ながら、サーバー 「${data.serverName}」 への参加申請は拒否されました`, 'error');
+            }
         }
     }
 ];

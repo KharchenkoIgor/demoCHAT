@@ -12,4 +12,6 @@ import project.demoChat.model.Server;
 public interface ServerRepository extends JpaRepository<Server, Long> {
 
     List<Server> findByMembersUserUsername(String username);
+
+    List<Server> findByNameContaining(String name);
 }

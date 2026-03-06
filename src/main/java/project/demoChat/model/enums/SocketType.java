@@ -8,6 +8,8 @@ public enum SocketType {
     UPDATE_SERVER,
     UPDATE_CHANNEL,
     UPDATE_MESSAGE,
+    NEW_JOIN_REQUEST,
+    JOIN_RESPONSE,
     STATUS,
     NOTIFICATION
 }

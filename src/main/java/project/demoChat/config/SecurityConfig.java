@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/api/auth/**", "/css/**", "/js/**", "/ws-chat/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/api/auth/**", "/css/**", "/js/**", "/ws-chat/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
 

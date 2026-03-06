@@ -2,40 +2,33 @@ package project.demoChat.model;
 
 import jakarta.persistence.*;
 
-import project.demoChat.model.enums.MemberRole;
+import project.demoChat.model.enums.JoinRequestStatus;
 
 @Entity
-@Table(name = "members")
-public class Member {
+@Table(name = "join_requests")
+public class JoinRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "server_id")
     private Server server;
 
-    @Enumerated(EnumType.STRING)
-    private MemberRole role;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Member() {}
+    @Enumerated(EnumType.STRING)
+    private JoinRequestStatus status;
+
+    public JoinRequest() {}
 
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Server getServer() {
@@ -45,10 +38,17 @@ public class Member {
         this.server = server;
     }
 
-    public MemberRole getRole() {
-        return role;
+    public User getUser() {
+        return user;
     }
-    public void setRole(MemberRole role) {
-        this.role = role;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public JoinRequestStatus getStatus() {
+        return status;
+    }
+    public void setStatus(JoinRequestStatus status) {
+        this.status = status;
     }
 }

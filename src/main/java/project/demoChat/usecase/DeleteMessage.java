@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import project.demoChat.model.Message;
 import project.demoChat.repository.MessageRepository;
-import project.demoChat.config.RolePermission;
+import project.demoChat.config.ChatSecurity;
 import project.demoChat.websocket.DeleteMessagePublisher;
 
 @RequiredArgsConstructor
@@ -14,13 +14,13 @@ import project.demoChat.websocket.DeleteMessagePublisher;
 public class DeleteMessage {
 
     private final MessageRepository messageRepository;
-    private final RolePermission rolePermission;
+    private final ChatSecurity chatSecurity;
     private final DeleteMessagePublisher deleteMessagePublisher;
 
     @Transactional
     public void execute(Long messageId, String username) {
         Message message = messageRepository.findById(messageId).orElseThrow();
-        rolePermission.checkMessageDelete(message, username);
+        chatSecurity.checkMessageDelete(message, username);
 
         deleteMessagePublisher.broadcastMessageDelete(message);
 
