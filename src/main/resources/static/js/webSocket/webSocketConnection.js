@@ -14,6 +14,20 @@ export function webSocketConnection(userServers, handleEvent) {
         stompClient.subscribe('/user/queue/events', event => {
             handleEvent(JSON.parse(event.body));
         });
+
+        stompClient.subscribe('/user/queue/reply', event => {
+            const data = JSON.parse(event.body);
+            handleEvent({ type: "JOIN_RESPONSE", ...data });
+        });
+
+        if (userServers && Array.isArray(userServers)) {
+            userServers.forEach(server => {
+                stompClient.subscribe(`/topic/server/${server.id}/requests`, event => {
+                    const data = JSON.parse(event.body);
+                    handleEvent({ type: "NEW_JOIN_REQUEST", ...data });
+                });
+            });
+        }
     }, error => {
         stompClient = null;
         setTimeout(() => webSocketConnection(userServers, handleEvent), 5000);

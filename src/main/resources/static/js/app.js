@@ -35,11 +35,7 @@ window.addEventListener('load', async () => {
         const channelButton = document.getElementById('add-channel-button');
         if (channelButton) channelButton.addEventListener('click', () => openModal('channel'));
 
-        if (window.userServers && window.userServers.length > 0) {
-            webSocketConnection(window.userServers, handleWebSocketEvent);
-        } else {
-            console.warn("サーバーが読み込まれていないため、WebSocket接続をスキップしました");
-        }
+        webSocketConnection(window.userServers || [], handleWebSocketEvent);
     } catch (e) {
         console.error("ログインが出来ませんでした", e);
     }

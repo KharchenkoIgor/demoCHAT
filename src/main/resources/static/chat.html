@@ -11,6 +11,8 @@
 <!-- 1. Боковая панель серверов -->
 <div class="sidebar-servers" id="server-list">
   <div id="home-button" class="server-icon" title="Home" onclick="goToHome()">🏠</div>
+  <div id="search-server-button" class="server-icon" title="Search"
+       onclick="import('./js/modalScript.js').then(m => m.openModal('search'))">🔍</div>
   <div id="add-server-button" class="server-icon add-server-btn">+</div>
 </div>
 
@@ -50,7 +52,25 @@
   <div class="modal-content">
     <h3 id="modal-title">名称</h3>
     <p id="modal-description" class="modal-desc">入力欄</p>
-    <input type="text" id="modal-input" placeholder="名称を入力して下さい">
+
+    <input type="text" id="modal-input">
+
+    <div id="modal-server-type-container" style="margin: 15px 0; display: none; flex-direction: column; gap: 10px;">
+      <p style="font-size: 0.9rem; font-weight: bold; margin: 0;">サーバーの公開設定:</p>
+      <div style="display: flex; gap: 20px;">
+        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+          <input type="radio" name="serverType" value="public" checked>
+          <span>パブリック (PUBLIC)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+          <input type="radio" name="serverType" value="private">
+          <span>プライベート (PRIVATE)</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="modal-list-container" class="modal-list-area"></div>
+
     <div class="modal-buttons">
       <button class="btn-cancel">キャンセル</button>
       <button class="btn-create" id="modal-submit-button">作成</button>

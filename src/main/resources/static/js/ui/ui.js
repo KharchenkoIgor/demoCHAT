@@ -28,9 +28,10 @@ export function renderServerIcon(server, onClick) {
     });
 }
 
-export function renderServerHeader(serverName, onEdit = null, onDelete = null) {
+export function renderServerHeader(serverName, onEdit = null, onDelete = null, onRequests = null) {
     const elements = [el('span', { text: serverName })];
 
+    if (onRequests) elements.push(createBtn('👥', 'server-requests-btn', onRequests));
     if (onEdit) elements.push(createBtn('✏️', 'server-edit-btn', onEdit));
     if (onDelete) elements.push(createBtn('🗑️', 'server-delete-btn', onDelete));
     return elements;

@@ -13,7 +13,7 @@ public class ServerMapper {
 
         dto.setId(server.getId());
         dto.setName(server.getName());
-
+        dto.setPublicStatus(server.isPublicStatus());
         dto.setType("SERVER");
 
         return dto;

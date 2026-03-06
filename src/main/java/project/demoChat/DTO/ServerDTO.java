@@ -3,7 +3,8 @@ package project.demoChat.DTO;
 public class ServerDTO {
     private Long id;
     private String name;
-    private String type; // Добавили поле type
+    private boolean publicStatus;
+    private String type;
 
     public ServerDTO() {}
 
@@ -18,6 +19,13 @@ public class ServerDTO {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public boolean isPublicStatus() { return publicStatus; }
+    public void setPublicStatus(boolean publicStatus) { this.publicStatus = publicStatus; }
+
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
 }
