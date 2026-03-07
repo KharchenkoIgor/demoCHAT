@@ -13,6 +13,8 @@ import project.demoChat.domain.JoinRequest;
 import project.demoChat.domain.enums.JoinRequestStatus;
 import project.demoChat.domain.enums.MemberRole;
 import project.demoChat.domain.enums.SocketType;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.server.repository.MemberRepository;
 import project.demoChat.features.server.repository.JoinRequestRepository;
 
@@ -27,10 +29,16 @@ public class AcceptedJoinRequest {
     @Transactional
     public void execute(Long requestId, String username) {
         JoinRequest request = joinRequestRepository.findById(requestId)
-                .orElseThrow(() -> new RuntimeException("申請が見つかりません"));
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "申請が見つかりません"
+                ));
 
         if (request.getStatus() != JoinRequestStatus.PENDING) {
-            throw new RuntimeException("申請はもう承認されています");
+            throw new AppException(
+                    ErrorCode.VALIDATION_ERROR,
+                    "申請はもう承認されています"
+            );
         }
 
         chatSecurity.checkRole(request.getServer().getId(), username, MemberRole.OWNER);

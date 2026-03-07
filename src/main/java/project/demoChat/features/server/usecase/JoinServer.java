@@ -12,6 +12,8 @@ import project.demoChat.domain.JoinRequest;
 import project.demoChat.domain.enums.JoinRequestStatus;
 import project.demoChat.domain.enums.MemberRole;
 import project.demoChat.domain.enums.SocketType;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.auth.UserRepository;
 import project.demoChat.features.server.repository.ServerRepository;
 import project.demoChat.features.server.repository.MemberRepository;
@@ -31,8 +33,16 @@ public class JoinServer {
 
     @Transactional
     public String execute(Long serverId,String username) {
-        Server server = serverRepository.findById(serverId).orElseThrow();
-        User user = userRepository.findByUsername(username).orElseThrow();
+        Server server = serverRepository.findById(serverId)
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "サーバーが見つかりません"
+                ));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "ユーザーが見つかりません"
+                ));
 
         if (memberRepository.existsByServerIdAndUserId(serverId, user.getId())) {
             return "ALREADY_MEMBER";

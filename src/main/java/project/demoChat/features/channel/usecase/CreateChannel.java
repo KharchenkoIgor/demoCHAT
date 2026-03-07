@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import project.demoChat.domain.Server;
 import project.demoChat.domain.Channel;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.channel.ChannelDTO;
 import project.demoChat.features.channel.ChannelRepository;
 import project.demoChat.features.server.repository.ServerRepository;
@@ -20,7 +22,10 @@ public class CreateChannel {
     @Transactional
     public Channel execute(ChannelDTO channelDTO) {
         Server server = serverRepository.findById(channelDTO.getServerId())
-                .orElseThrow(() -> new RuntimeException("サーバーが見つかりません"));
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "チャンネルが見つかりません"
+                ));
 
         Channel newChannel = new Channel();
         newChannel.setName(channelDTO.getName());
