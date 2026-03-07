@@ -34,14 +34,21 @@ It features secure authentication, hierarchical server management, and live mess
 - [x] **Session-based Auth** / セッションベースの認証実装
 - [x] **MySQL & JPA Mapping** / MySQL と JPA によるリレーショナルマッピング
 - [x] **Transactional Logic (`@Transactional`)** / トランザクション制御の実装
-- [x] **Boilerplate reduction with Lombok** / Lombok によるコードの簡略化
 
+### 🛠 Refactoring & Optimization / リファクタリングと最適化
+- [x] **Boilerplate reduction with Lombok** / Lombok によるコードの簡略化
+- [x] **Frontend JS Modularization / フロントエンド JS のモジュール化とクリーンアップ
+- [x] **CSS Variable System / CSS 変数システムによるスタイルの統一
+- [ ] **Spring Validation Transition / Spring Validation への移行 (手動の if チェックを削除)
+- [ ] **Global Exception Handling / グローバル例外ハンドリング (@RestControllerAdvice)
+- [ ] **[Refactor] Dynamic Topic Routing** / 動的トピックルーティングへの移行 (`/topic/channel.{id}`)
+  
 ### 🟢 Level 1: Core MVP / レベル 1: コア機能 (MVP)
 - **Servers & Members / サーバーとメンバー**
   - [x] Create/Edit/Delete Server (Owner only) / サーバー作成・編集・削除 (所有者のみ)
   - [x] Auto-add Creator as **OWNER** / 作成者の自動オーナー権限付与
-  - [ ] **Server Visibility (Public vs Private)** / サーバーの公開・非公開設定
-  - [ ] Join Request System (for Private) / 非公開サーバーへの参加申請システム
+  - [x] **Server Visibility (Public vs Private)** / サーバーの公開・非公開設定
+  - [x] Join Request System (for Private) / 非公開サーバーへの参加申請システム
 - **Channels Management / チャンネル管理**
   - [x] **Create Text Channels** / テキストチャンネルの作成
   - [x] **Edit & Delete Channels** / チャンネルの編集・削除
@@ -52,11 +59,10 @@ It features secure authentication, hierarchical server management, and live mess
   - [x] Message Persistence (DB) / メッセージのデータベース保存
   - [x] Live Edit/Delete Messages / メッセージの編集・削除 (リアルタイム)
   - [x] Load Channel History / チャンネル履歴の読み込み
-  - [ ] **[Refactor] Dynamic Topic Routing** / 動的トピックルーティングへの移行 (`/topic/channel.{id}`)
 
 ### 🛠 Level 2: Auth & Validation / レベル 2: 認証とバリデーション
 - [ ] **Password Reset via Email (SMTP)** / パスワード再設定 (SMTP/メール連携)
-- [ ] Implementation of **DTOs** / APIレイヤーへの DTO 実装
+- [x] Implementation of **DTOs** / APIレイヤーへの DTO 実装
 - [ ] Bean Validation (`@Valid`, `@NotBlank`) / Bean Validation による入力チェック
 - [ ] Global Exception Handling / グローバル例外ハンドリング (`@RestControllerAdvice`)
 
