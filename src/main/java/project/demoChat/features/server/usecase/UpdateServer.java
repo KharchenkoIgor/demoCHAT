@@ -1,0 +1,34 @@
+package project.demoChat.features.server.usecase;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import project.demoChat.domain.Server;
+import project.demoChat.domain.enums.MemberRole;
+import project.demoChat.features.server.repository.ServerRepository;
+import project.demoChat.config.RolePermission;
+import project.demoChat.features.server.websocket.ServerUpdatePublisher;
+
+@RequiredArgsConstructor
+@Component
+public class UpdateServer {
+
+    private final ServerRepository serverRepository;
+    private final RolePermission rolePermission;
+    private final ServerUpdatePublisher serverUpdatePublisher;
+
+    @Transactional
+    public void execute(Long serverId, String newName, String username) {
+
+        rolePermission.checkRole(serverId, username, MemberRole.OWNER);
+
+        Server server = serverRepository.findById(serverId)
+                .orElseThrow(() -> new RuntimeException("サーバーが見つかりません"));
+
+        server.setName(newName);
+        Server savedServer = serverRepository.save(server);
+
+        serverUpdatePublisher.broadcastServerUpdated(savedServer);
+    }
+}
