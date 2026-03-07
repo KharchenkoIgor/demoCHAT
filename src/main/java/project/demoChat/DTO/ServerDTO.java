@@ -1,31 +1,15 @@
 package project.demoChat.DTO;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ServerDTO {
     private Long id;
     private String name;
     private boolean publicStatus;
     private String type;
-
-    public ServerDTO() {}
-
-    public ServerDTO(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public boolean isPublicStatus() { return publicStatus; }
-    public void setPublicStatus(boolean publicStatus) { this.publicStatus = publicStatus; }
-
-    public String getType() {
-        return type;
-    }
-    public void setType(String type) {
-        this.type = type;
-    }
 }

@@ -1,11 +1,18 @@
 package project.demoChat.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import jakarta.persistence.*;
 
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "servers")
 public class Server {
@@ -30,56 +37,4 @@ public class Server {
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JoinRequest> joinRequests;
-
-    public Server() {}
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isPublicStatus() {
-        return publicStatus;
-    }
-    public void setPublicStatus(boolean publicStatus) {
-        this.publicStatus = publicStatus;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public List<Channel> getChannel() {
-        return channel;
-    }
-    public void setChannel(List<Channel> channel) {
-        this.channel = channel;
-    }
-
-    public List<Member> getMembers() {
-        return members;
-    }
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
-
-    public List<JoinRequest> getJoinRequests() {
-        return joinRequests;
-    }
-
-    public void setJoinRequests(List<JoinRequest> joinRequests) {
-        this.joinRequests = joinRequests;
-    }
 }
