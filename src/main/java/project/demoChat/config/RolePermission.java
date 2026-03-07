@@ -2,10 +2,10 @@ package project.demoChat.config;
 
 import org.springframework.stereotype.Component;
 
-import project.demoChat.model.Member;
-import project.demoChat.model.Message;
-import project.demoChat.model.enums.MemberRole;
-import project.demoChat.repository.MemberRepository;
+import project.demoChat.domain.Member;
+import project.demoChat.domain.Message;
+import project.demoChat.domain.enums.MemberRole;
+import project.demoChat.features.server.repository.MemberRepository;
 
 @Component
 public class RolePermission {
