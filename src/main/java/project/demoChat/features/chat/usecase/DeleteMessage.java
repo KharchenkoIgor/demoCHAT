@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import project.demoChat.domain.Message;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.chat.MessageRepository;
 import project.demoChat.config.ChatSecurity;
 import project.demoChat.features.chat.websocket.DeleteMessagePublisher;
@@ -19,7 +21,11 @@ public class DeleteMessage {
 
     @Transactional
     public void execute(Long messageId, String username) {
-        Message message = messageRepository.findById(messageId).orElseThrow();
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "メッセージが見つかりません"
+                ));
         chatSecurity.checkMessageDelete(message, username);
 
         deleteMessagePublisher.broadcastMessageDelete(message);

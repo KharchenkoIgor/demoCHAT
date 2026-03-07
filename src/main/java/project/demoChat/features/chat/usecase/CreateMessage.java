@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.auth.UserRepository;
 import project.demoChat.features.channel.ChannelRepository;
 import project.demoChat.features.chat.MessageDTO;
@@ -23,10 +25,16 @@ public class CreateMessage {
     @Transactional
     public MessageDTO execute(MessageDTO messageDTO) {
         User author = userRepository.findByUsername(messageDTO.getSenderName())
-                .orElseThrow(() -> new RuntimeException("ユーザー名が見つかりません"));
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "ユーザー名が見つかりません"
+                ));
 
         Channel channel = channelRepository.findById(messageDTO.getChannelId())
-                .orElseThrow(() -> new RuntimeException("チャンネル名が見つかりません"));
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "チャンネル名が見つかりません"
+                ));
 
         Message newMessage = new Message();
         newMessage.setContent(messageDTO.getContent());

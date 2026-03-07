@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import project.demoChat.config.ChatSecurity;
 import project.demoChat.domain.Message;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.chat.MessageRepository;
 import project.demoChat.features.chat.websocket.MessageUpdatePublisher;
 
@@ -20,7 +22,10 @@ public class UpdateMessage {
     @Transactional
     public void execute(Long messageId, String content, String username) {
         Message newMessage = messageRepository.findById(messageId)
-                .orElseThrow(() -> new RuntimeException("メッセージが見つかりません"));
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "メッセージが見つかりません"
+                ));
 
         chatSecurity.checkMessageEdit(newMessage, username);
 
