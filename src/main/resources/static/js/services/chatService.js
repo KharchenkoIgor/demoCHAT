@@ -1,9 +1,7 @@
-import { fetchServers, fetchChannels, fetchHistory, fetchMyRole,
-    deleteMessage, deleteChannel, deleteServer, updateMessage,
-    searchServers, joinServer, fetchJoinRequests, acceptedJoinRequest,
-    rejectJoinRequest} from '../api/api.js';
-import { showPush } from '../api/showPush.js';
-import * as UI from './ui.js';
+import { fetchServers, fetchMyRole, deleteServer } from '../api/serverApi.js';
+import { fetchChannels, deleteChannel } from '../api/channelApi.js';
+import { fetchHistory, deleteMessage, updateMessage } from '../api/messageApi.js';
+import * as UI from '../ui/ui.js';
 import { appState, setCurrentServer, setCurrentChannel } from '../state.js';
 import { openModal } from '../modalScript.js';
 
@@ -95,9 +93,15 @@ export async function refreshChannelsUI() {
 }
 
 async function handleChannelClick(channel) {
+    const currentServerId = appState.currentServerId;
+
     setCurrentChannel(channel.id);
     document.getElementById('chat-channel-name').textContent = `# ${channel.name}`;
     getChat().innerHTML = '';
+
+    if (window.clearNotificationBadge && currentServerId) {
+        window.clearNotificationBadge(currentServerId, channel.id);
+    }
 
     const history = await fetchHistory(channel.id);
     history.forEach(displayNewMessage);
@@ -158,76 +162,3 @@ async function handleEditMessage(msg) {
 async function handleDeleteMessage(id) {
     await confirmAndDelete("削除しますか？", () => deleteMessage(id), () => document.getElementById(`message-${id}`)?.remove());
 }
-
-export async function handleSearchServers(query) {
-    if (!query) return;
-    const results = await searchServers(query);
-    const container = document.getElementById('modal-list-container');
-    if (!container) return;
-
-    container.innerHTML = results.length ? '' : 'サーバーが見つかりません。';
-    results.forEach(server => {
-        const div = document.createElement('div');
-        div.className = 'search-result-item';
-        div.innerHTML = `
-            <span>${server.name}</span>
-            <button onclick="handleJoinServerClick(${server.id})">参加</button>
-        `;
-        container.appendChild(div);
-    });
-}
-
-window.handleJoinServerClick = async (serverId) => {
-    await handleJoinServer(serverId);
-};
-
-export async function handleJoinServer(serverId) {
-    try {
-        const response = await joinServer(serverId);
-        const status = response.status;
-        if (status === 'JOINED') {
-            showPush("サーバーに参加しました！", 'success');
-            setTimeout(() => window.location.reload(), 1500);
-        }
-        else if (status === 'PENDING'){
-            showPush("参加申請を送信しました。管理者の承認をお待ちください", 'info');
-        }
-        else if (status === 'ALREADY_MEMBER') {
-            showPush("既にこのサーバーの参加者です", 'info');
-        }
-        else if (status === 'PENDING_EXISTS') {
-            showPush("既に申請済みです。承認をお持ち下さい");
-        }
-    } catch (e) {
-        showPush("エラーが発生しました", 'error');
-    }
-}
-
-export async function refreshRequestsUI(serverId) {
-    const container = document.getElementById('modal-list-container');
-    if (!container) return;
-
-    const requests = await fetchJoinRequests(serverId);
-    container.innerHTML = requests.length ? '' : '待機中の申請はありません。';
-
-    requests.forEach(req => {
-        const item = document.createElement('div');
-        item.className = 'modal-list-item';
-        item.innerHTML = `
-            <span>${req.username}</span>
-            <button onclick="processRequest(${req.id}, 'approve')">✅</button>
-            <button onclick="processRequest(${req.id}, 'reject')">❌</button>
-        `;
-        container.appendChild(item);
-    });
-}
-
-window.refreshRequestsUI = refreshRequestsUI;
-
-window.processRequest = async (requestId, action) => {
-    try {
-        if (action === 'approve') await acceptedJoinRequest(requestId);
-        else await rejectJoinRequest(requestId);
-        if (appState.currentServerId) refreshRequestsUI(appState.currentServerId);
-    } catch (e) { alert(e.message); }
-};

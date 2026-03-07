@@ -6,12 +6,18 @@
     --bg-medium: #2b2d31;
     --bg-light: #313338;
     --bg-input: #383a40;
+    --bg-hover-subtle: #35373c;
+    --bg-hover-active: #404249;
+
     --text-primary: #b5bac1;
     --text-accent: #23a559;
     --text-hover: white;
+    --text-muted: #949ba4;
+
     --hover-blue: #5865f2;
     --hover-blue-dark: #4752c4;
     --danger-red: #da373c;
+
     --radius-small: 4px;
     --radius-medium: 8px;
     --radius-circle: 50%;
@@ -24,9 +30,9 @@ body {
     margin: 0;
     height: 100vh;
     display: flex;
-    font-family: "gg sans","Segoe UI",sans-serif;
+    font-family: "gg sans", "Segoe UI", sans-serif;
     background: var(--bg-light);
-    color: var(--text-hover);
+    color: var(--text-primary);
 }
 
 /* ======================================================
@@ -137,21 +143,21 @@ body {
 }
 
 .channel-wrapper:hover {
-    background: #35373c;
+    background: var(--bg-hover-subtle);
     transform: translateX(2px);
 }
 
 .channel-item {
     flex-grow: 1;
     padding: 6px 8px;
-    color: #949ba4;
+    color: var(--text-muted);
     cursor: pointer;
 }
 
 .channel-wrapper:hover .channel-item { color: var(--text-hover); }
 
 .channel-item.active {
-    background: #404249;
+    background: var(--bg-hover-active);
     color: white;
     border-radius: var(--radius-small);
 }
@@ -180,7 +186,7 @@ body {
 .members-header {
     font-size: 12px;
     font-weight: 600;
-    color: #949ba4;
+    color: var(--text-muted);
     margin-bottom: 10px;
 }
 
@@ -194,7 +200,7 @@ body {
     transition: background .15s;
 }
 
-.member-item:hover { background: #35373c; color: white; }
+.member-item:hover { background: var(--bg-hover-subtle); color: var(--text-hover); }
 
 .member-avatar {
     width: 32px;
@@ -260,7 +266,7 @@ body {
 .msg-content { display: flex; align-items: center; gap: 6px; }
 
 .msg-author { font-weight: 600; color: var(--text-accent); }
-.msg-text { color: #dbdee1; }
+.msg-text { color: var(--text-primary); }
 
 /* MESSAGE ACTIONS */
 .msg-actions { display: flex; gap: 6px; transform: translateX(8px); }
@@ -308,7 +314,11 @@ body {
 .edit-btn,
 .delete-btn,
 .server-edit-btn,
-.server-delete-btn {
+.server-delete-btn,
+.server-requests-btn,
+.btn-approve,
+.btn-reject
+{
     width: 28px;
     height: 28px;
     display: flex;
@@ -325,10 +335,10 @@ body {
     box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 
-/* hover эффекты */
 .msg-btn:hover,
 .edit-btn:hover,
-.server-edit-btn:hover {
+.server-edit-btn:hover,
+.server-requests-btn:hover {
     background: var(--hover-blue);
     color: white;
     transform: translateY(-1px);
@@ -343,13 +353,65 @@ body {
     box-shadow: 0 2px 6px rgba(0,0,0,.35);
 }
 
-/* active/click feel */
+.btn-approve:hover {
+    background: var(--text-accent);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+
+.btn-reject:hover {
+    background: var(--danger-red);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+
 .msg-btn:active,
 .edit-btn:active,
 .delete-btn:active,
 .server-edit-btn:active,
-.server-delete-btn:active { transform: scale(.92); }
+.server-delete-btn:active,
+.server-requests-btn:active,
+.btn-approve:active,
+.btn-reject:active
+{ transform: scale(.92); }
 
+.modal-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.05);
+    margin-bottom: 5px;
+    border-radius: var(--radius-small);
+}
+
+.modal-list-item .btn-approve,
+.modal-list-item .btn-reject {
+    background: var(--bg-medium);
+    color: var(--text-primary);
+}
+
+.modal-list-item .btn-approve:hover {
+    background: var(--text-accent);
+    color: white;
+}
+.modal-list-item .btn-reject:hover {
+    background: var(--danger-red);
+    color: white;
+}
+
+.btn-join {
+    background: var(--hover-blue);
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-small);
+    color: white;
+    cursor: pointer;
+    transition: background .15s;
+}
+.btn-join:hover { background: var(--hover-blue-dark); }
 /* ======================================================
    CONTROLS CONTAINERS
 ====================================================== */
@@ -369,7 +431,6 @@ body {
     transition: .15s;
 }
 
-/* Показываем кнопки при ховере родителя */
 .message-item:hover .msg-controls,
 .channel-wrapper:hover .channel-controls {
     opacity: 1;
@@ -448,14 +509,11 @@ body {
 }
 
 .modal-item-btns button {
-    cursor: pointer;
     background: none;
     border: none;
-    font-size: 1.2rem;
+    padding: 0;
 }
 
-
-/* Контейнер для пуш-уведомлений */
 #notification-container {
     position: fixed;
     top: 20px;
@@ -466,9 +524,8 @@ body {
     gap: 10px;
 }
 
-/* Сама плашка уведомления */
 .toast {
-    background: #2f3136; /* Цвет Discord */
+    background: #2f3136;
     color: white;
     padding: 15px 20px;
     border-radius: 8px;
@@ -476,7 +533,7 @@ body {
     min-width: 280px;
     transform: translateX(120%);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border-left: 5px solid #7289da;
+    border-left: 5px solid var(--hover-blue);
     font-family: sans-serif;
     display: flex;
     align-items: center;
@@ -486,7 +543,34 @@ body {
     transform: translateX(0);
 }
 
-/* Типы уведомлений */
-.toast.success { border-left-color: #43b581; }
-.toast.error { border-left-color: #f04747; }
-.toast.info { border-left-color: #7289da; }
+.toast.success { border-left-color: var(--text-accent); }
+.toast.error { border-left-color: var(--danger-red); }
+.toast.info { border-left-color: var(--hover-blue); }
+
+.server-icon.has-notification::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--danger-red); /* Красный цвет уведомления */
+    border: 2px solid var(--bg-dark); /* Обводка в цвет фона сайдбара */
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+
+/* СТИЛЬ ДЛЯ КАНАЛА (МЕНЬШИЙ КРУГ/ТОЧКА) */
+/* Проверяем, есть ли класс unread */
+.channel-wrapper.unread::after {
+    content: "";
+    position: absolute;
+    left: 5px; /* Смещение от левого края канала */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: var(--danger-red); /* Красный цвет уведомления */
+    border-radius: 50%;
+}
