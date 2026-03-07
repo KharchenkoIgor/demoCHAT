@@ -1,4 +1,4 @@
-import { showPush } from '../api/showPush.js';
+import { showPush } from '../utils/showPush.js';
 
 export const eventHandlers = [
     {
@@ -70,10 +70,12 @@ export const eventHandlers = [
     },
     {
         type:"NEW_JOIN_REQUEST",
-        handler: (data) => {
+        handler: (data, context) => {
             showPush(`新規申請: ${data.username} がサーバーに参加を希望しています`, 'info');
 
-            if (window.refreshRequestsUI) window.refreshRequestsUI(data.serverId);
+            if (typeof window.refreshRequestsUI === 'function') {
+                window.refreshRequestsUI(data.serverId);
+            }
         }
     },
     {

@@ -45,6 +45,7 @@ public class UserService {
         }
 
         User newUser = new User(
+                null,
                 request.getUsername(),
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),

@@ -1,11 +1,15 @@
 import { appState } from './state.js';
-import { fetchMe } from './api/api.js';
+import { fetchMe } from './api/authApi.js';
 import { webSocketConnection } from './webSocket/webSocketConnection.js';
 import { eventHandlers } from './handlers/eventHandlers.js';
-import { initChatPage, displayNewMessage } from './ui/chatLogic.js';
+import { initChatPage, displayNewMessage } from './services/chatService.js';
 import { setupMessageInput } from './utils/sendMessage.js';
-import { showNotificationBadge } from './renderers/showNotificationBadge.js';
+import { showNotificationBadge, clearNotificationBadge } from './utils/showNotificationBadge.js';
 import { openModal } from './modalScript.js';
+import './services/joinService.js';
+
+window.showNotificationBadge = showNotificationBadge;
+window.clearNotificationBadge = clearNotificationBadge;
 
 function handleWebSocketEvent(data) {
     const handlerObject = eventHandlers.find(h => h.type === data.type);
@@ -15,7 +19,9 @@ function handleWebSocketEvent(data) {
         currentServerId: appState.currentServerId,
         currentChannelId: appState.currentChannelId,
         displayNewMessage,
-        showNotificationBadge
+        showNotificationBadge,
+        clearNotificationBadge: window.clearNotificationBadge,
+        refreshRequestsUI: window.refreshRequestsUI
     });
 }
 

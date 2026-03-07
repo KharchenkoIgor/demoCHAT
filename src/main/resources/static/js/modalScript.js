@@ -1,6 +1,5 @@
-import { createServer, createChannel, updateServer, updateChannel } from "./api/api.js";
-import { initChatPage, refreshServersUI, refreshChannelsUI } from "./ui/chatLogic.js";
-import { appState, setCurrentServer } from "./state.js";
+import { MODAL_CONFIG, getIsPublicValue } from './config/modalConfig.js';
+import { ACTION_HANDLERS } from './services/modalActionHandler.js';
 
 const modal = document.getElementById('universal-modal');
 const elements = {
@@ -15,80 +14,23 @@ const elements = {
 let currentType = null;
 let currentEditId = null;
 
-const CONFIG = {
-    server: {
-        title: "サーバー作成",
-        desc: "新しいサーバー名を入力して下さい",
-        placeholder: "サーバー名",
-        action: async (name, id, isPublicStatus) => {
-            const newServer = await createServer(name, isPublicStatus);
-            setCurrentServer(newServer.id);
-            await initChatPage();
-            await refreshChannelsUI(newServer.id);
-        }
-    },
-    channel: {
-        title: "チャンネル作成",
-        desc: "新しいチャンネル名を入力して下さい",
-        placeholder: "チャンネル名",
-        action: async (name) => {
-            if (!appState.currentServerId) throw new Error("まずサーバーを選択してください！");
-            await createChannel(name, appState.currentServerId);
-            await refreshChannelsUI(appState.currentServerId);
-        }
-    },
-    editServer: {
-        title: "サーバー編集",
-        desc: "新しいサーバー名を入力して下さい",
-        placeholder: "新しいサーバー名",
-        action: async (name, id, isPublicStatus) => {
-            await updateServer(id, name, isPublicStatus);
-            await refreshServersUI();
-        }
-    },
-    editChannel: {
-        title: "チャンネル編集",
-        desc: "新しいチャンネル名を入力して下さい",
-        placeholder: "新しいチャンネル名",
-        action: async (name, id) => {
-            await updateChannel(id, name);
-            await refreshChannelsUI(appState.currentServerId);
-        }
-    },
-    viewRequests: {
-        title: "加入申請",
-        desc: "サーバーへの参加希望者リスト",
-        showInput: false,
-        action: async (val, id) => {}
-    },
-    search: {
-        title: "サーバー検索",
-        desc: "探したいサーバー名を入力してください",
-        placeholder: "検索...",
-        showInput: true,
-        action: async (name) => {
-            const { handleSearchServers } = await import('./ui/chatLogic.js');
-            await handleSearchServers(name);
-        }
-    }
-};
-
-function getIsPublicValue() {
-    const selected = document.querySelector('input[name="serverType"]:checked');
-    return selected ? selected.value === 'public' : true;
-}
-
 async function handleSubmit() {
     const name = elements.input.value.trim();
-    const cfg = CONFIG[currentType];
-    if (!name || !cfg) return;
+    const cfg = MODAL_CONFIG[currentType];
+    if (!name && cfg.showInput !== false) return;
 
-    const isPublic = getIsPublicValue()
+    const isPublic = getIsPublicValue();
 
     try {
         elements.submit.disabled = true;
-        await cfg.action(name, currentEditId, isPublic);
-        if (currentType !== 'search') {
+
+        if (cfg.service && cfg.action) {
+            await ACTION_HANDLERS[cfg.service][cfg.action](name, currentEditId, isPublic);
+        } else {
+            await cfg.action(name, currentEditId, isPublic);
+        }
+
+        if (currentType !== 'search' && currentType !== 'viewRequests') {
             closeModal();
         }
     } catch (error) {
@@ -100,7 +42,7 @@ async function handleSubmit() {
 }
 
 export function openModal(type, editId = null, initialValue = "", initialPublic = true) {
-    const cfg = CONFIG[type];
+    const cfg = MODAL_CONFIG[type];
     if (!modal || !cfg) return;
 
     currentType = type;
@@ -108,6 +50,9 @@ export function openModal(type, editId = null, initialValue = "", initialPublic 
 
     elements.title.innerText = cfg.title;
     elements.desc.innerText = cfg.desc;
+
+    elements.submit.style.display = cfg.showSubmit === false ? 'none' : 'block';
+    elements.submit.innerText = cfg.buttonText || "作成";
 
     if (type === 'server' || type === 'editServer') {
         elements.serverTypeContainer.style.display = 'flex';
@@ -130,7 +75,7 @@ export function openModal(type, editId = null, initialValue = "", initialPublic 
     modal.style.display = 'flex';
 
     if (type === 'viewRequests') {
-        import('./ui/chatLogic.js').then(m => m.refreshRequestsUI(editId));
+        ACTION_HANDLERS.viewRequests.action(editId);
     }
 }
 
