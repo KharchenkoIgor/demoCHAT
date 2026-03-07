@@ -10,6 +10,8 @@ import project.demoChat.domain.JoinRequest;
 import project.demoChat.domain.enums.JoinRequestStatus;
 import project.demoChat.domain.enums.MemberRole;
 import project.demoChat.domain.enums.SocketType;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.server.repository.JoinRequestRepository;
 
 import java.util.Map;
@@ -24,7 +26,10 @@ public class RejectJoinRequest {
     @Transactional
     public void execute(Long requestId, String username) {
         JoinRequest request = joinRequestRepository.findById(requestId)
-                .orElseThrow(() -> new RuntimeException("申請が見つかりません"));
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "申請が見つかりません"
+                ));
 
         chatSecurity.checkRole(request.getServer().getId(), username, MemberRole.OWNER);
 

@@ -1,11 +1,13 @@
 package project.demoChat.features.channel.usecase;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import project.demoChat.domain.Channel;
 import project.demoChat.domain.enums.MemberRole;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.channel.ChannelRepository;
 import project.demoChat.config.RolePermission;
 import project.demoChat.features.channel.websocket.DeleteChannelPublisher;
@@ -20,7 +22,11 @@ public class DeleteChannel {
 
     @Transactional
     public void execute(Long channelId, String username) {
-        Channel channel = channelRepository.findById(channelId).orElseThrow();
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "チャンネルが見つかりません"
+                ));
         rolePermission.checkRole(channel.getServer().getId(), username, MemberRole.ADMIN);
 
         deleteChannelPublisher.broadcastChannelDelete(channel);

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import project.demoChat.domain.Server;
 import project.demoChat.domain.enums.MemberRole;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.server.repository.ServerRepository;
 import project.demoChat.config.RolePermission;
 import project.demoChat.features.server.websocket.ServerUpdatePublisher;
@@ -24,7 +26,10 @@ public class UpdateServer {
         rolePermission.checkRole(serverId, username, MemberRole.OWNER);
 
         Server server = serverRepository.findById(serverId)
-                .orElseThrow(() -> new RuntimeException("サーバーが見つかりません"));
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "サーバーが見つかりません"
+                ));
 
         server.setName(newName);
         Server savedServer = serverRepository.save(server);

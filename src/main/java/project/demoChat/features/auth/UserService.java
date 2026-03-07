@@ -7,7 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
 
 import project.demoChat.domain.User;
-import project.demoChat.exception.ValidationException;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 
 @RequiredArgsConstructor
 @Service
@@ -19,27 +20,51 @@ public class UserService {
     public User registerUser(RegistrationDTO request) {
 
         if (request.getUsername().length() < 3 || request.getUsername().length() > 15) {
-            throw new ValidationException("username", "3から15までの字が入力しなければならない！");
+            throw new AppException(
+                    ErrorCode.VALIDATION_ERROR,
+                    "username",
+                    "3から15までの字が入力しなければならない！"
+            );
         }
 
         if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
-            throw new ValidationException("email", "メールアドレスを入力して下さい");
+            throw new AppException(
+                    ErrorCode.VALIDATION_ERROR,
+                    "email",
+                    "メールアドレスを入力して下さい"
+            );
         }
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new ValidationException("email", "このメールアドレスは既に登録されています");
+            throw new AppException(
+                    ErrorCode.VALIDATION_ERROR,
+                    "email",
+                    "このメールアドレスは既に登録されています"
+            );
         }
 
         if (request.getPassword().length() <6) {
-            throw new ValidationException("password", "パスワードが短すぎます (最小6字)");
+            throw new AppException(
+                    ErrorCode.VALIDATION_ERROR,
+                    "password",
+                    "パスワードが短すぎます (最小6字)"
+            );
         }
 
         if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new ValidationException("confirmPassword", "パスワードが一致しません");
+            throw new AppException(
+                    ErrorCode.VALIDATION_ERROR,
+                    "confirmPassword",
+                    "パスワードが一致しません"
+            );
         }
 
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new ValidationException("username", "入力したユーザー名はもう存在していますよ!");
+            throw new AppException(
+                    ErrorCode.VALIDATION_ERROR,
+                    "username",
+                    "入力したユーザー名はもう存在していますよ!"
+            );
         }
 
         User newUser = new User(

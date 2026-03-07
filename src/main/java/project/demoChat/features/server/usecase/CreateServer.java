@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import project.demoChat.domain.*;
 import project.demoChat.domain.enums.MemberRole;
+import project.demoChat.exception.AppException;
+import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.auth.UserRepository;
 import project.demoChat.features.server.repository.ServerRepository;
 import project.demoChat.features.channel.ChannelRepository;
@@ -23,7 +25,10 @@ public class CreateServer {
     @Transactional
     public Server execute(String serverName, boolean isPublicStatus, String username) {
         User owner = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません: " + username));
+                .orElseThrow(() -> new AppException(
+                        ErrorCode.RESOURCE_NOT_FOUND,
+                        "サーバーが見つかりません" + username
+                ));
 
         Server newServer = new Server();
         newServer.setName(serverName);
