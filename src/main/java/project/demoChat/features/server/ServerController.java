@@ -12,6 +12,10 @@ import java.util.Map;
 
 import project.demoChat.domain.Server;
 import project.demoChat.config.ChatSecurity;
+import project.demoChat.features.server.DTO.JoinRequestDTO;
+import project.demoChat.features.server.DTO.ServerDTO;
+import project.demoChat.features.server.DTO.ServerMapper;
+import project.demoChat.features.server.Mapper.JoinRequestMapper;
 
 @RequiredArgsConstructor
 @RestController

@@ -9,7 +9,7 @@ import project.demoChat.domain.Message;
 import project.demoChat.exception.AppException;
 import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.chat.MessageRepository;
-import project.demoChat.features.chat.websocket.MessageUpdatePublisher;
+import project.demoChat.features.chat.websocket.ChatEventPublisher;
 
 @RequiredArgsConstructor
 @Service
@@ -17,7 +17,7 @@ public class UpdateMessage {
 
     private final ChatSecurity chatSecurity;
     private final MessageRepository messageRepository;
-    private final MessageUpdatePublisher messageUpdate;
+    private final ChatEventPublisher chatPublisher;
 
     @Transactional
     public void execute(Long messageId, String content, String username) {
@@ -32,6 +32,6 @@ public class UpdateMessage {
         newMessage.setContent(content);
         Message savedMessage = messageRepository.save(newMessage);
 
-        messageUpdate.broadcastMessageUpdated(savedMessage);
+        chatPublisher.publishUpdate(savedMessage);
     }
 }

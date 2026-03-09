@@ -4,32 +4,34 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import project.demoChat.config.ChatSecurity;
 import project.demoChat.domain.Server;
 import project.demoChat.domain.enums.MemberRole;
 import project.demoChat.exception.AppException;
 import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.server.repository.ServerRepository;
-import project.demoChat.config.RolePermission;
-import project.demoChat.features.server.websocket.DeleteServerPublisher;
+
+import project.demoChat.features.server.websocket.ServerEventPublisher;
 
 @RequiredArgsConstructor
 @Service
 public class DeleteServer {
 
     private final ServerRepository serverRepository;
-    private final RolePermission rolePermission;
-    private final DeleteServerPublisher deleteServerPublisher;
+    private final ChatSecurity chatSecurity;
+    private final ServerEventPublisher serverPublisher;
 
     @Transactional
     public void execute(Long serverId, String username) {
-        rolePermission.checkRole(serverId, username, MemberRole.OWNER);
+        chatSecurity.checkRole(serverId, username, MemberRole.OWNER);
+
         Server server = serverRepository.findById(serverId)
                 .orElseThrow(() -> new AppException(
                         ErrorCode.RESOURCE_NOT_FOUND,
                         "サーバーが見つかりません"
                 ));
 
-        deleteServerPublisher.broadcastServerDelete(server);
+        serverPublisher.publishDelete(server);
 
         serverRepository.delete(server);
     }
