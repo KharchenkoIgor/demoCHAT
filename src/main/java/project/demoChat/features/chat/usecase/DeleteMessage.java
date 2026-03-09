@@ -9,7 +9,7 @@ import project.demoChat.exception.AppException;
 import project.demoChat.exception.ErrorCode;
 import project.demoChat.features.chat.MessageRepository;
 import project.demoChat.config.ChatSecurity;
-import project.demoChat.features.chat.websocket.DeleteMessagePublisher;
+import project.demoChat.features.chat.websocket.ChatEventPublisher;
 
 @RequiredArgsConstructor
 @Service
@@ -17,7 +17,7 @@ public class DeleteMessage {
 
     private final MessageRepository messageRepository;
     private final ChatSecurity chatSecurity;
-    private final DeleteMessagePublisher deleteMessagePublisher;
+    private final ChatEventPublisher chatPublisher;
 
     @Transactional
     public void execute(Long messageId, String username) {
@@ -26,10 +26,11 @@ public class DeleteMessage {
                         ErrorCode.RESOURCE_NOT_FOUND,
                         "メッセージが見つかりません"
                 ));
+
         chatSecurity.checkMessageDelete(message, username);
 
-        deleteMessagePublisher.broadcastMessageDelete(message);
-
         messageRepository.delete(message);
+
+        chatPublisher.publishDelete(message);
     }
 }

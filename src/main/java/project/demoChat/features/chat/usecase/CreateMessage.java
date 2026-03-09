@@ -11,6 +11,7 @@ import project.demoChat.features.channel.ChannelRepository;
 import project.demoChat.features.chat.MessageDTO;
 import project.demoChat.domain.*;
 import project.demoChat.features.chat.MessageRepository;
+import project.demoChat.features.chat.websocket.ChatEventPublisher;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ public class CreateMessage {
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
     private final MessageRepository messageRepository;
+    private final ChatEventPublisher chatPublisher;
 
     @Transactional
     public MessageDTO execute(MessageDTO messageDTO) {
@@ -45,6 +47,9 @@ public class CreateMessage {
         Message savedMessage = messageRepository.save(newMessage);
 
         messageDTO.setId(savedMessage.getId());
+
+        chatPublisher.publishCreate(messageDTO);
+
         return messageDTO;
     }
 }

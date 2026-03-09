@@ -53,9 +53,11 @@ async function handleServerClick(server) {
     setCurrentServer(server.id);
     setCurrentChannel(null);
 
-    updateServerHeaderUI(server);
+    const latestServer = window.userServers.find(s => s.id === server.id) || server;
+    updateServerHeaderUI(latestServer);
 
     document.querySelector('#chat-channel-name').textContent = 'チャンネルを選択してください';
+
     getChat().innerHTML = '';
     await refreshChannelsUI();
 }
@@ -96,7 +98,12 @@ async function handleChannelClick(channel) {
     const currentServerId = appState.currentServerId;
 
     setCurrentChannel(channel.id);
-    document.getElementById('chat-channel-name').textContent = `# ${channel.name}`;
+
+    const channelElement = document.querySelector(`#channel-item-${channel.id} .channel-item`);
+    const actualName = channelElement ? channelElement.textContent : `# ${channel.name}`;
+
+    document.getElementById('chat-channel-name').textContent = actualName;
+
     getChat().innerHTML = '';
 
     if (window.clearNotificationBadge && currentServerId) {

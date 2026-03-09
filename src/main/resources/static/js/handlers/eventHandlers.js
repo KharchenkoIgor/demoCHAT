@@ -41,6 +41,14 @@ export const eventHandlers = [
 
             if (serverIcon) serverIcon.textContent = data.name.substring(0, 2).toUpperCase();
 
+            if (window.userServers) {
+                const serverIndex = window.userServers.findIndex(s => String(s.id) === String(data.id));
+                if (serverIndex !== -1) {
+                    window.userServers[serverIndex].name = data.name;
+
+                }
+            }
+
             if (String(data.id) === String(context.currentServerId)) {
                 const headerSpan = document.querySelector('#server-header-container span');
                 if (headerSpan) headerSpan.textContent = data.name;

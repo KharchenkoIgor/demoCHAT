@@ -1,7 +1,8 @@
-package project.demoChat.features.server;
+package project.demoChat.features.server.Mapper;
 
 import org.springframework.stereotype.Component;
 import project.demoChat.domain.JoinRequest;
+import project.demoChat.features.server.DTO.JoinRequestDTO;
 
 @Component
 public class JoinRequestMapper {

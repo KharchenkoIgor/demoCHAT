@@ -1,4 +1,4 @@
-package project.demoChat.features.server;
+package project.demoChat.features.server.DTO;
 
 import org.springframework.stereotype.Component;
 import project.demoChat.domain.Server;

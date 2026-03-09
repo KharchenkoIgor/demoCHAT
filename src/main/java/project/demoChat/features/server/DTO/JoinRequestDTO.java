@@ -1,4 +1,4 @@
-package project.demoChat.features.server;
+package project.demoChat.features.server.DTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

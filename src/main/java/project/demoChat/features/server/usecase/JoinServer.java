@@ -18,7 +18,7 @@ import project.demoChat.features.auth.UserRepository;
 import project.demoChat.features.server.repository.ServerRepository;
 import project.demoChat.features.server.repository.MemberRepository;
 import project.demoChat.features.server.repository.JoinRequestRepository;
-import project.demoChat.features.server.JoinRequestDTO;
+import project.demoChat.features.server.DTO.JoinRequestDTO;
 
 import java.util.Optional;
 
