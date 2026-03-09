@@ -43,7 +43,7 @@ It features secure authentication, hierarchical server management, and live mess
 - [x] **Package by Feature** Architecture / フィーチャー駆動パッケージ構成への移行
 - [x] WebSocket Publisher Optimization / WebSocket配信ロジックの統合 (ServerEventNotifier)
 - [x] **Stale Data Bugfixes (Frontend)** / フロントエンドの古いデータ表示バグの修正 (Stale Closure解消)
-  [ ] **Dynamic Topic Routing** / 動的トピックルーティングへの移行 (`/topic/channel.{id}`)
+- [ ] **Dynamic Topic Routing** / 動的トピックルーティングへの移行 (`/topic/channel.{id}`)
   
 ### 🟢 Level 1: Core MVP / レベル 1: コア機能 (MVP)
 - **Servers & Members / サーバーとメンバー**
