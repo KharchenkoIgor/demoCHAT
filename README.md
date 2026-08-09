@@ -181,9 +181,9 @@ sudo systemctl start mysql
 sudo mysql
 ```
 ```sql
-CREATE DATABASE demo_chat CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE demochat_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER '*********'@'localhost' IDENTIFIED BY '*********';
-GRANT ALL PRIVILEGES ON demo_chat.* TO 'chatapp'@'localhost';
+GRANT ALL PRIVILEGES ON demochat_db.* TO '*********'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 ```
@@ -201,7 +201,7 @@ scp -i mykey.pem target/demoChat-*.jar ubuntu@<EC2_PUBLIC_IP>:/home/ubuntu/app.j
 Never hardcode DB credentials into `application.properties`. Export them as environment variables instead, and reference them with `${...}` placeholders in `application.properties` (e.g. `spring.datasource.password=${DB_PASSWORD}`).
 DBの認証情報を`application.properties`に直接書かないこと。環境変数として設定し、`application.properties`側では`${...}`のプレースホルダーで参照します（例：`spring.datasource.password=${DB_PASSWORD}`）。
 ```bash
-echo 'export DB_URL="jdbc:mysql://localhost:3306/demo_chat"' >> ~/.bashrc
+echo 'export DB_URL="jdbc:mysql://localhost:3306/demochat_db"' >> ~/.bashrc
 echo 'export DB_USER="*********"' >> ~/.bashrc
 echo 'export DB_PASSWORD="*********"' >> ~/.bashrc
 source ~/.bashrc
@@ -266,7 +266,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/demo_chat
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/demochat_db
       - SPRING_DATASOURCE_USERNAME=*********
       - SPRING_DATASOURCE_PASSWORD=*********
     depends_on:
@@ -275,7 +275,7 @@ services:
     image: mysql:8
     environment:
       - MYSQL_ROOT_PASSWORD=rootpass
-      - MYSQL_DATABASE=demo_chat
+      - MYSQL_DATABASE=demochat_db
       - MYSQL_USER=*********
       - MYSQL_PASSWORD=*********
     volumes:
